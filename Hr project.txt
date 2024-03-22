@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Employees Hierarchy</title>
+<style>
+/* Basic styling for the employee hierarchy */
+#employees-container {
+  margin-top: 20px;
+}
+
+#employees-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.employee {
+  margin-left: 20px;
+}
+</style>
+</head>
+<body>
+
+<div id="employees-container">
+  <ul id="employees-list">
+    <!-- Employee list will be dynamically generated here -->
+  </ul>
+</div>
+
+<script>
+// Sample employee data representing hierarchical structure
+const employees = [
+  { id: 1, name: "CEO", managerId: null },
+  { id: 2, name: "HR Manager", managerId: 1 },
+  { id: 3, name: "Recruitment Specialist", managerId: 2 },
+  { id: 4, name: "Employee Relations Specialist", managerId: 2 },
+  { id: 5, name: "HR Assistant", managerId: 2 },
+  { id: 6, name: "Recruiter", managerId: 3 },
+  { id: 7, name: "Employee Relations Coordinator", managerId: 4 },
+  { id: 8, name: "HR Intern", managerId: 5 },
+];
+
+// Function to recursively build the employee hierarchy
+function buildHierarchy(managerId, indent) {
+  const ul = document.createElement('ul');
+  employees.filter(emp => emp.managerId === managerId).forEach(emp => {
+    const li = document.createElement('li');
+    li.textContent = emp.name;
+    li.className = 'employee';
+    if (indent) {
+      li.style.marginLeft = `${indent * 20}px`;
+    }
+    const subordinates = buildHierarchy(emp.id, indent + 1);
+    if (subordinates) {
+      li.appendChild(subordinates);
+    }
+    ul.appendChild(li);
+  });
+  return ul;
+}
+
+// Display the hierarchy
+const employeesContainer = document.getElementById('employees-list');
+employeesContainer.appendChild(buildHierarchy(null, 0));
+</script>
+
+</body>
+</html>
